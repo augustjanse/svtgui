@@ -14,7 +14,7 @@ class SVTGUI:
         self.click_button.pack()
 
         self.close_button = tk.Button(master, text="Klicka för att avsluta", command=master.quit)
-        self.click_button.pack()
+        self.close_button.pack()
 
     def execute(self):
         call(["./svtplay-dl"])
