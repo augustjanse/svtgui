@@ -7,8 +7,8 @@ class SVTGUI:
         self.master = master
         master.title("SVTGUI")
 
-        self.label = tk.Label(master, text="Testtext här")
-        self.label.pack()
+        self.textbox = tk.Text(master, height=1, width=100)
+        self.textbox.pack()
 
         self.click_button = tk.Button(master, text="Klicka för att kalla funktion", command=self.execute)
         self.click_button.pack()
@@ -17,7 +17,7 @@ class SVTGUI:
         self.close_button.pack()
 
     def execute(self):
-        call(["./svtplay-dl"])
+        call(["./svtplay-dl", self.textbox.get("1.0", "end-1c")])
 
 
 root = tk.Tk()
