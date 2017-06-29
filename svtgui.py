@@ -17,8 +17,13 @@ class SVTGUI:
         self.close_button.pack()
 
     def execute(self):
-        call(["./svtplay-dl", self.textbox.get("1.0", "end-1c")])
+        argument_list = ["./svtplay-dl"]
 
+        url = self.textbox.get("1.0", "end-1c")
+        if url:
+            argument_list.append(url)
+
+        call(argument_list)
 
 root = tk.Tk()
 svtgui = SVTGUI(root)
