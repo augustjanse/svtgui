@@ -10,7 +10,7 @@ class SVTGUI:
         self.textbox = tk.Text(master, height=1, width=100)
         self.textbox.pack()
 
-        self.subtitles_checked = tk.BooleanVar()
+        self.subtitles_checked = tk.BooleanVar(value=True)
         self.subtitle_check = tk.Checkbutton(master, text="Subtitles", variable=self.subtitles_checked)
         self.subtitle_check.pack()
 
