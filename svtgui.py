@@ -14,6 +14,10 @@ class SVTGUI:
         self.subtitle_check = tk.Checkbutton(master, text="Subtitles", variable=self.subtitles_checked)
         self.subtitle_check.pack()
 
+        self.all_episodes_checked = tk.BooleanVar()
+        self.all_episodes_check = tk.Checkbutton(master, text="All episodes", variable=self.all_episodes_checked)
+        self.all_episodes_check.pack()
+
         self.click_button = tk.Button(master, text="Klicka för att kalla funktion", command=self.execute)
         self.click_button.pack()
 
@@ -25,6 +29,9 @@ class SVTGUI:
 
         if self.subtitles_checked.get():
             argument_list.extend(["-M", "--convert-subtitle-colors", "--all-subtitles"])
+
+        if self.all_episodes_checked.get():
+            argument_list.extend(["--all-episodes"])
 
         url = self.textbox.get("1.0", "end-1c")
         if url:
