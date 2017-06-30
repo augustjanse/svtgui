@@ -28,7 +28,7 @@ class SVTGUI:
         argument_list = ["./svtplay-dl"]
 
         if self.subtitles_checked.get():
-            argument_list.extend(["-M", "--convert-subtitle-colors", "--all-subtitles"])
+            argument_list.extend(["--merge-subtitle", "--convert-subtitle-colors", "--all-subtitles"])
 
         if self.all_episodes_checked.get():
             argument_list.extend(["--all-episodes"])
