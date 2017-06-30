@@ -24,7 +24,7 @@ class SVTGUI:
         argument_list = ["./svtplay-dl"]
 
         if self.subtitles_checked.get():
-            argument_list.extend(["-M", "--convert-subtitle-colors"])
+            argument_list.extend(["-M", "--convert-subtitle-colors", "--all-subtitles"])
 
         url = self.textbox.get("1.0", "end-1c")
         if url:
