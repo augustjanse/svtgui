@@ -18,11 +18,8 @@ class SVTGUI:
         self.all_episodes_check = tk.Checkbutton(master, text="All episodes", variable=self.all_episodes_checked)
         self.all_episodes_check.pack()
 
-        self.click_button = tk.Button(master, text="Klicka för att kalla funktion", command=self.execute)
+        self.click_button = tk.Button(master, text="Download", command=self.execute)
         self.click_button.pack()
-
-        self.close_button = tk.Button(master, text="Klicka för att avsluta", command=master.quit)
-        self.close_button.pack()
 
     def execute(self):
         argument_list = ["./svtplay-dl"]
