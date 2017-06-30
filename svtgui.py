@@ -1,3 +1,4 @@
+import sys
 import tkinter as tk
 from subprocess import call
 
@@ -21,6 +22,11 @@ class SVTGUI:
         self.click_button = tk.Button(master, text="Download", command=self.execute)
         self.click_button.pack()
 
+        self.details = tk.Text(master, height=10, width=100)
+        self.details.pack()
+
+        sys.stdout = open("output.log", "w+")
+
     def execute(self):
         argument_list = ["./svtplay-dl"]
 
@@ -35,7 +41,8 @@ class SVTGUI:
             argument_list.append(url)
 
         print(" ".join(argument_list))
-        call(argument_list)
+        sys.stdout.flush()
+        call(argument_list, stdout=sys.stdout)
 
 root = tk.Tk()
 svtgui = SVTGUI(root)
