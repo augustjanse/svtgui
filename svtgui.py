@@ -2,6 +2,7 @@ import sys
 import tkinter as tk
 from subprocess import call
 
+
 class SVTGUI:
     def __init__(self, master):
         """Initalize a GUI window with checkboxes, a text box and a clickable
@@ -14,14 +15,19 @@ class SVTGUI:
         self.textbox.pack()
 
         self.subtitles_checked = tk.BooleanVar(value=True)
-        self.subtitle_check = tk.Checkbutton(master, text="Subtitles", variable=self.subtitles_checked)
+        self.subtitle_check = tk.Checkbutton(master,
+                                             text="Subtitles",
+                                             variable=self.subtitles_checked)
         self.subtitle_check.pack()
 
         self.all_episodes_checked = tk.BooleanVar()
-        self.all_episodes_check = tk.Checkbutton(master, text="All episodes", variable=self.all_episodes_checked)
+        self.all_episodes_check = tk.Checkbutton(
+            master, text="All episodes", variable=self.all_episodes_checked)
         self.all_episodes_check.pack()
 
-        self.click_button = tk.Button(master, text="Download", command=self.execute)
+        self.click_button = tk.Button(master,
+                                      text="Download",
+                                      command=self.execute)
         self.click_button.pack()
 
         self.details = tk.Text(master, height=10, width=100)
@@ -37,7 +43,10 @@ class SVTGUI:
         argument_list = ["./svtplay-dl"]
 
         if self.subtitles_checked.get():
-            argument_list.extend(["--merge-subtitle", "--convert-subtitle-colors", "--all-subtitles"])
+            argument_list.extend([
+                "--merge-subtitle", "--convert-subtitle-colors",
+                "--all-subtitles"
+            ])
 
         if self.all_episodes_checked.get():
             argument_list.extend(["--all-episodes"])
@@ -49,6 +58,7 @@ class SVTGUI:
         print(" ".join(argument_list))
         sys.stdout.flush()
         call(argument_list, stdout=sys.stdout)
+
 
 root = tk.Tk()
 svtgui = SVTGUI(root)
