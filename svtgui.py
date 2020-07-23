@@ -40,7 +40,7 @@ class SVTGUI:
         finished, the indicated files should have been downloaded to the
         file system.
         """
-        argument_list = ["./svtplay-dl"]
+        argument_list = ["svtplay-dl"]
 
         if self.subtitles_checked.get():
             argument_list.extend([
