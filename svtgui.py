@@ -2,7 +2,6 @@ import sys
 import tkinter as tk
 from subprocess import call
 
-
 class SVTGUI:
     def __init__(self, master):
         """Initalize a GUI window with checkboxes, a text box and a clickable
@@ -25,9 +24,12 @@ class SVTGUI:
             master, text="All episodes", variable=self.all_episodes_checked)
         self.all_episodes_check.pack()
 
-        self.click_button = tk.Button(master,
-                                      text="Download",
-                                      command=self.execute)
+        self.click_button = tk.Button(
+            master,
+            text="Download",
+            command=lambda: self.execute(self.subtitles_checked.get(), self.
+                                         all_episodes_checked.get(),
+                                         self.textbox.get("1.0", "end-1c")))
         self.click_button.pack()
 
         self.details = tk.Text(master, height=10, width=100)
@@ -35,23 +37,22 @@ class SVTGUI:
 
         sys.stdout = open("output.log", "w+")
 
-    def execute(self):
+    def execute(self, subtitles_checked, all_episodes_checked, url):
         """Calls svtplay-dl. Uses values from checkboxes and textbox. When
         finished, the indicated files should have been downloaded to the
         file system.
         """
         argument_list = ["svtplay-dl"]
 
-        if self.subtitles_checked.get():
+        if subtitles_checked:
             argument_list.extend([
                 "--merge-subtitle", "--convert-subtitle-colors",
                 "--all-subtitles"
             ])
 
-        if self.all_episodes_checked.get():
+        if all_episodes_checked:
             argument_list.extend(["--all-episodes"])
 
-        url = self.textbox.get("1.0", "end-1c")
         if url:
             argument_list.append(url)
 
