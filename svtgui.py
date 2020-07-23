@@ -37,7 +37,7 @@ class SVTGUI:
         self.details = tk.Text(master, height=10, width=100)
         self.details.pack()
 
-        self.update_output(self.details)
+        self.update_output(self.details, 0)
 
     def execute(self, subtitles_checked, all_episodes_checked, url):
         """Calls svtplay-dl. Uses values from checkboxes and textbox. When
@@ -62,11 +62,22 @@ class SVTGUI:
         for line in self.run_shell_command(argument_list):
             self.out = self.out + line
 
-    def update_output(self, textbox):
+    def update_output(self, textbox, line):
         """Update the output textbox every half second."""
-        textbox.delete("1.0", "end")
-        textbox.insert(tk.END, self.out)
-        textbox.after(500, lambda: self.update_output(textbox))
+        lines = self.out.strip().split('\n')
+
+        if lines == ['']:
+            lines = []
+
+        new = lines[line:]
+
+        if new:
+            new_lines = '\n'.join(new) + '\n'
+        else:
+            new_lines = ''
+
+        textbox.insert(tk.END, new_lines)
+        textbox.after(100, lambda: self.update_output(textbox, len(lines)))
 
     # https://stackoverflow.com/a/4417735/1729441
     def run_shell_command(self, args):
