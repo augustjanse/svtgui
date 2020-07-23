@@ -1,6 +1,6 @@
 import sys
 import tkinter as tk
-from subprocess import call
+import subprocess
 
 
 class SVTGUI:
@@ -25,6 +25,7 @@ class SVTGUI:
             master, text="All episodes", variable=self.all_episodes_checked)
         self.all_episodes_check.pack()
 
+        self.out = ''
         self.click_button = tk.Button(
             master,
             text="Download",
@@ -35,6 +36,8 @@ class SVTGUI:
 
         self.details = tk.Text(master, height=10, width=100)
         self.details.pack()
+
+        self.update_output(self.details)
 
     def execute(self, subtitles_checked, all_episodes_checked, url):
         """Calls svtplay-dl. Uses values from checkboxes and textbox. When
@@ -56,7 +59,28 @@ class SVTGUI:
             argument_list.append(url)
 
         print(" ".join(argument_list))
-        call(argument_list, stdout=sys.stdout)
+        for line in self.run_shell_command(argument_list):
+            self.out = self.out + line
+
+    def update_output(self, textbox):
+        """Update the output textbox every half second."""
+        textbox.delete("1.0", "end")
+        textbox.insert(tk.END, self.out)
+        textbox.after(500, lambda: self.update_output(textbox))
+
+    # https://stackoverflow.com/a/4417735/1729441
+    def run_shell_command(self, args):
+        popen = subprocess.Popen(args,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.STDOUT,
+                                 universal_newlines=True)
+        for line in iter(popen.stdout.readline, ""):
+            yield line
+        popen.stdout.close()
+        ret = popen.wait()
+
+        if ret:
+            raise subprocess.CalledProcessError(ret, args)
 
 
 root = tk.Tk()
