@@ -2,9 +2,11 @@ import sys
 import tkinter as tk
 from subprocess import call
 
-# Very adapted from http://python-textbok.readthedocs.io/en/1.0/Introduction_to_GUI_Programming.html
 class SVTGUI:
     def __init__(self, master):
+        """Initalize a GUI window with checkboxes, a text box and a clickable
+        "Download" button.
+        """
         self.master = master
         master.title("SVTGUI")
 
@@ -28,6 +30,10 @@ class SVTGUI:
         sys.stdout = open("output.log", "w+")
 
     def execute(self):
+        """Calls svtplay-dl. Uses values from checkboxes and textbox. When
+        finished, the indicated files should have been downloaded to the
+        file system.
+        """
         argument_list = ["./svtplay-dl"]
 
         if self.subtitles_checked.get():
