@@ -36,8 +36,6 @@ class SVTGUI:
         self.details = tk.Text(master, height=10, width=100)
         self.details.pack()
 
-        sys.stdout = open("output.log", "w+")
-
     def execute(self, subtitles_checked, all_episodes_checked, url):
         """Calls svtplay-dl. Uses values from checkboxes and textbox. When
         finished, the indicated files should have been downloaded to the
@@ -58,7 +56,6 @@ class SVTGUI:
             argument_list.append(url)
 
         print(" ".join(argument_list))
-        sys.stdout.flush()
         call(argument_list, stdout=sys.stdout)
 
 
