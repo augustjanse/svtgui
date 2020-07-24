@@ -36,8 +36,7 @@ class SVTGUI:
 
         self.details = tk.Text(master, height=10, width=100)
         self.details.pack()
-
-        self.update_output(self.details, 0)
+        sys.stdout = StdoutRedirector(self.details)
 
     def execute(self, subtitles_checked, all_episodes_checked, url):
         """Calls svtplay-dl. Uses values from checkboxes and textbox. When
@@ -49,7 +48,7 @@ class SVTGUI:
         if subtitles_checked:
             argument_list.extend([
                 "--merge-subtitle", "--convert-subtitle-colors",
-                "--all-subtitles"
+                "--all-subtitles", "--force"
             ])
 
         if all_episodes_checked:
@@ -60,31 +59,16 @@ class SVTGUI:
 
         print(" ".join(argument_list))
         for line in self.run_shell_command(argument_list):
-            self.out = self.out + line
-
-    def update_output(self, textbox, line):
-        """Update the output textbox every half second."""
-        lines = self.out.strip().split('\n')
-
-        if lines == ['']:
-            lines = []
-
-        new = lines[line:]
-
-        if new:
-            new_lines = '\n'.join(new) + '\n'
-        else:
-            new_lines = ''
-
-        textbox.insert(tk.END, new_lines)
-        textbox.after(100, lambda: self.update_output(textbox, len(lines)))
+            print(line)
 
     # https://stackoverflow.com/a/4417735/1729441
     def run_shell_command(self, args):
-        popen = subprocess.Popen(args,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.STDOUT,
-                                 universal_newlines=True)
+        popen = subprocess.Popen(
+            args,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.
+            STDOUT,  # Om denna rad är med så blir printsen lite fula. Men om den inte är med så funkar inte update_output ALLS. (Det är dock oavsett försenade.)
+            universal_newlines=True)
         for line in iter(popen.stdout.readline, ""):
             yield line
         popen.stdout.close()
@@ -92,6 +76,16 @@ class SVTGUI:
 
         if ret:
             raise subprocess.CalledProcessError(ret, args)
+
+
+# https://stackoverflow.com/q/18517084/1729441
+class StdoutRedirector(object):
+    def __init__(self, text_widget):
+        self.text_space = text_widget
+
+    def write(self, string):
+        self.text_space.insert('end', string)
+        self.text_space.see('end')
 
 
 root = tk.Tk()
