@@ -8,33 +8,46 @@ class SVTGUI:
         """Initalize a GUI window with checkboxes, a text box and a clickable
         "Download" button.
         """
-        self.master = master
-        master.title("SVTGUI")
+        self._set_up_window(master)
+        self._set_up_input_box()
+        self._set_up_checkboxes()
+        self._set_up_button()
+        self._set_up_output_box()
 
-        self.textbox = tk.Text(master, height=1, width=100)
+    def _set_up_window(self, master):
+        self.master = master
+        self.master.title("SVTGUI")
+
+    def _set_up_input_box(self):
+        self.textbox = tk.Text(self.master, height=1, width=100)
         self.textbox.pack()
 
+    def _set_up_checkboxes(self):
         self.subtitles_checked = tk.BooleanVar(value=True)
-        self.subtitle_check = tk.Checkbutton(master,
+        self.subtitle_check = tk.Checkbutton(self.master,
                                              text="Subtitles",
                                              variable=self.subtitles_checked)
         self.subtitle_check.pack()
 
         self.all_episodes_checked = tk.BooleanVar()
         self.all_episodes_check = tk.Checkbutton(
-            master, text="All episodes", variable=self.all_episodes_checked)
+            self.master,
+            text="All episodes",
+            variable=self.all_episodes_checked)
         self.all_episodes_check.pack()
 
+    def _set_up_button(self):
         self.out = ''
         self.click_button = tk.Button(
-            master,
+            self.master,
             text="Download",
             command=lambda: self.execute(self.subtitles_checked.get(),
                                          self.all_episodes_checked.get(),
                                          self.textbox.get("1.0", "end-1c")))
         self.click_button.pack()
 
-        self.details = tk.Text(master, height=10, width=100)
+    def _set_up_output_box(self):
+        self.details = tk.Text(self.master, height=10, width=100)
         self.details.pack()
         sys.stdout = StdoutRedirector(self.details)
 
