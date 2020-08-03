@@ -63,12 +63,10 @@ class SVTGUI:
 
     # https://stackoverflow.com/a/4417735/1729441
     def run_shell_command(self, args):
-        popen = subprocess.Popen(
-            args,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.
-            STDOUT,  # Om denna rad är med så blir printsen lite fula. Men om den inte är med så funkar inte update_output ALLS. (Det är dock oavsett försenade.)
-            universal_newlines=True)
+        popen = subprocess.Popen(args,
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.STDOUT,
+                                 universal_newlines=True)
         for line in iter(popen.stdout.readline, ""):
             yield line
         popen.stdout.close()
@@ -86,6 +84,7 @@ class StdoutRedirector(object):
     def write(self, string):
         self.text_space.insert('end', string)
         self.text_space.see('end')
+        self.text_space.update_idletasks()
 
 
 root = tk.Tk()
