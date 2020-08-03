@@ -1,3 +1,5 @@
+"""Starts the SVTGUI graphical application."""
+
 import subprocess
 import sys
 import tkinter as tk
