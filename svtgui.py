@@ -41,9 +41,9 @@ class SVTGUI:
         self.click_button = tk.Button(
             self.master,
             text="Download",
-            command=lambda: self.execute(self.subtitles_checked.get(),
-                                         self.all_episodes_checked.get(),
-                                         self.textbox.get("1.0", "end-1c")))
+            command=lambda: execute(self.subtitles_checked.get(),
+                                    self.all_episodes_checked.get(),
+                                    self.textbox.get("1.0", "end-1c")))
         self.click_button.pack()
 
     def _set_up_output_box(self):
@@ -51,28 +51,30 @@ class SVTGUI:
         self.details.pack()
         sys.stdout = StdoutRedirector(self.details)
 
-    def execute(self, subtitles_checked, all_episodes_checked, url):
-        """Calls svtplay-dl. Uses values from checkboxes and textbox. When
-        finished, the indicated files should have been downloaded to the
-        file system.
-        """
-        argument_list = ["svtplay-dl"]
 
-        if subtitles_checked:
-            argument_list.extend([
-                "--merge-subtitle", "--convert-subtitle-colors",
-                "--all-subtitles", "--force"
-            ])
+def execute(subtitles_requested, all_episodes_requested, url):
+    """Calls svtplay-dl. If subtitles_requested, subtitles are downloaded
+    and merged. If all_episodes_requested, all episodes of the series are
+    downloaded. When finished, the indicated files should have been
+    downloaded to the file system.
+    """
+    argument_list = ["svtplay-dl"]
 
-        if all_episodes_checked:
-            argument_list.extend(["--all-episodes"])
+    if subtitles_requested:
+        argument_list.extend([
+            "--merge-subtitle", "--convert-subtitle-colors", "--all-subtitles",
+            "--force"
+        ])
 
-        if url:
-            argument_list.append(url)
+    if all_episodes_requested:
+        argument_list.extend(["--all-episodes"])
 
-        print(" ".join(argument_list))
-        for line in run_shell_command(argument_list):
-            print(line)
+    if url:
+        argument_list.append(url)
+
+    print(" ".join(argument_list))
+    for line in run_shell_command(argument_list):
+        print(line)
 
 
 # https://stackoverflow.com/a/4417735/1729441
