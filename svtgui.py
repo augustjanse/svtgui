@@ -94,15 +94,21 @@ def run_shell_command(args):
         raise subprocess.CalledProcessError(ret, args)
 
 
-# https://stackoverflow.com/q/18517084/1729441
-class StdoutRedirector(object):
+class StdoutRedirector():
+    # https://stackoverflow.com/q/18517084/1729441
+    """A stdout replacement that instead writes to the given tk Text object."""
     def __init__(self, text_widget):
         self.text_space = text_widget
 
     def write(self, string):
+        """When written to (by print statements), insert the output to the
+        end of self.text_space, jump there, and update."""
         self.text_space.insert('end', string)
         self.text_space.see('end')
         self.text_space.update_idletasks()
+
+    def flush(self):
+        """Called when window is closed: do nothing."""
 
 
 root = tk.Tk()
