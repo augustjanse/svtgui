@@ -5,7 +5,8 @@ import sys
 import tkinter as tk
 
 
-class SVTGUI:
+class SVTGUI():  # pylint: disable=too-few-public-methods
+    """The main window of the application."""
     def __init__(self, master):
         """Initalize a GUI window with checkboxes, a text box and a clickable
         "Download" button.
@@ -26,17 +27,14 @@ class SVTGUI:
 
     def _set_up_checkboxes(self):
         self.subtitles_checked = tk.BooleanVar(value=True)
-        self.subtitle_check = tk.Checkbutton(self.master,
-                                             text="Subtitles",
-                                             variable=self.subtitles_checked)
-        self.subtitle_check.pack()
+        tk.Checkbutton(self.master,
+                       text="Subtitles",
+                       variable=self.subtitles_checked).pack()
 
-        self.all_episodes_checked = tk.BooleanVar()
-        self.all_episodes_check = tk.Checkbutton(
-            self.master,
-            text="All episodes",
-            variable=self.all_episodes_checked)
-        self.all_episodes_check.pack()
+        self.all_episodes_checked = tk.BooleanVar(value=False)
+        tk.Checkbutton(self.master,
+                       text="All episodes",
+                       variable=self.all_episodes_checked).pack()
 
     def _set_up_button(self):
         self.out = ''
