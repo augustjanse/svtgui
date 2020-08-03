@@ -1,6 +1,6 @@
+import subprocess
 import sys
 import tkinter as tk
-import subprocess
 
 
 class SVTGUI:
@@ -71,22 +71,27 @@ class SVTGUI:
             argument_list.append(url)
 
         print(" ".join(argument_list))
-        for line in self.run_shell_command(argument_list):
+        for line in run_shell_command(argument_list):
             print(line)
 
-    # https://stackoverflow.com/a/4417735/1729441
-    def run_shell_command(self, args):
-        popen = subprocess.Popen(args,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.STDOUT,
-                                 universal_newlines=True)
-        for line in iter(popen.stdout.readline, ""):
-            yield line
-        popen.stdout.close()
-        ret = popen.wait()
 
-        if ret:
-            raise subprocess.CalledProcessError(ret, args)
+# https://stackoverflow.com/a/4417735/1729441
+def run_shell_command(args):
+    """Calls the given shell command, then yields one line at a time of
+    the combined stdout/stderr output.
+    """
+
+    popen = subprocess.Popen(args,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.STDOUT,
+                             universal_newlines=True)
+    for line in iter(popen.stdout.readline, ""):
+        yield line
+    popen.stdout.close()
+    ret = popen.wait()
+
+    if ret:
+        raise subprocess.CalledProcessError(ret, args)
 
 
 # https://stackoverflow.com/q/18517084/1729441
