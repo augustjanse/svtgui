@@ -113,6 +113,7 @@ class StdoutRedirector():
         """Called when window is closed: do nothing."""
 
 
-root = tk.Tk()
-svtgui = SVTGUI(root)
-root.mainloop()
+if __name__ == "__main__":
+    root = tk.Tk()
+    svtgui = SVTGUI(root)
+    root.mainloop()
