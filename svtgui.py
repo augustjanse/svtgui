@@ -23,6 +23,7 @@ class SVTGUI():  # pylint: disable=too-few-public-methods
 
     def _set_up_input_box(self):
         self.textbox = tk.Text(self.master, height=1, width=100)
+        self.textbox.bind('<Return>', lambda event: self.start_download())
         self.textbox.pack()
 
     def _set_up_checkboxes(self):
@@ -38,18 +39,22 @@ class SVTGUI():  # pylint: disable=too-few-public-methods
 
     def _set_up_button(self):
         self.out = ''
-        self.click_button = tk.Button(
-            self.master,
-            text="Download",
-            command=lambda: execute(self.subtitles_checked.get(),
-                                    self.all_episodes_checked.get(),
-                                    self.textbox.get("1.0", "end-1c")))
+
+        self.click_button = tk.Button(self.master,
+                                      text="Download",
+                                      command=self.start_download)
+
         self.click_button.pack()
 
     def _set_up_output_box(self):
         self.details = tk.Text(self.master, height=10, width=100)
         self.details.pack()
         sys.stdout = StdoutRedirector(self.details)
+
+    def start_download(self):
+        """Calls execute with the contents of checkboxes and input box."""
+        execute(self.subtitles_checked.get(), self.all_episodes_checked.get(),
+                self.textbox.get("1.0", "end-1c"))
 
 
 def execute(subtitles_requested, all_episodes_requested, url):
