@@ -72,7 +72,7 @@ def execute(subtitles_requested, all_episodes_requested, url):
         ])
 
     if all_episodes_requested:
-        argument_list.extend(["--all-episodes"])
+        argument_list.append("--all-episodes")
 
     if url:
         argument_list.append(url)
