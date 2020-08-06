@@ -3,6 +3,7 @@
 import subprocess
 import sys
 import tkinter as tk
+from tkinter import filedialog
 
 
 class SVTGUI():  # pylint: disable=too-few-public-methods
@@ -14,6 +15,7 @@ class SVTGUI():  # pylint: disable=too-few-public-methods
         self._set_up_window(master)
         self._set_up_input_box()
         self._set_up_checkboxes()
+        self._set_up_output_directory_box()
         self._set_up_button()
         self._set_up_output_box()
 
@@ -37,6 +39,15 @@ class SVTGUI():  # pylint: disable=too-few-public-methods
                        text="All episodes",
                        variable=self.all_episodes_checked).pack()
 
+    def _set_up_output_directory_box(self):
+        self.output_directory_box = tk.Text(self.master, height=1, width=80)
+        self.output_directory_box.pack()
+
+        tk.Button(self.master,
+                  text="Browse...",
+                  command=lambda: self.output_directory_box.insert(
+                      'end', filedialog.askdirectory())).pack()
+
     def _set_up_button(self):
         self.out = ''
 
@@ -54,10 +65,12 @@ class SVTGUI():  # pylint: disable=too-few-public-methods
     def start_download(self):
         """Calls execute with the contents of checkboxes and input box."""
         execute(self.subtitles_checked.get(), self.all_episodes_checked.get(),
-                self.textbox.get("1.0", "end-1c"))
+                self.textbox.get("1.0", "end-1c"),
+                self.output_directory_box.get("1.0", "end-1c"))
 
 
-def execute(subtitles_requested, all_episodes_requested, url):
+def execute(subtitles_requested, all_episodes_requested, url,
+            output_directory):
     """Calls svtplay-dl. If subtitles_requested, subtitles are downloaded
     and merged. If all_episodes_requested, all episodes of the series are
     downloaded. When finished, the indicated files should have been
@@ -76,6 +89,9 @@ def execute(subtitles_requested, all_episodes_requested, url):
 
     if url:
         argument_list.append(url)
+
+    if output_directory:
+        argument_list.extend(['--output', output_directory])
 
     print(" ".join(argument_list))
     for line in run_shell_command(argument_list):
