@@ -3,3 +3,4 @@ before_install:
   - pip3 install pycodestyle
 script:
   - pycodestyle svtgui.py
+  - pytest
