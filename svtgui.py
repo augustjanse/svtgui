@@ -26,6 +26,7 @@ class SVTGUI():  # pylint: disable=too-few-public-methods
     def _set_up_input_box(self):
         self.textbox = tk.Entry(self.master, width=100)
         self.textbox.bind('<Return>', lambda event: self.start_download())
+        self.textbox.bind('<Control-a>', select_all)
         self.textbox.pack()
 
     def _set_up_checkboxes(self):
@@ -41,6 +42,7 @@ class SVTGUI():  # pylint: disable=too-few-public-methods
 
     def _set_up_output_directory_box(self):
         self.output_directory_box = tk.Entry(self.master, width=80)
+        self.output_directory_box.bind('<Control-a>', select_all)
         self.output_directory_box.pack()
 
         tk.Button(self.master,
@@ -114,6 +116,16 @@ def run_shell_command(args):
 
     if ret:
         raise subprocess.CalledProcessError(ret, args)
+
+
+# https://stackoverflow.com/a/53640777/1729441
+def select_all(event):
+    """Selects all text in the widget indicated by the event.
+    Returns 'break' to stop event propagation (if bound to a key press).
+    """
+    event.widget.select_range(0, 'end')
+    event.widget.icursor('end')
+    return 'break'
 
 
 class StdoutRedirector():
