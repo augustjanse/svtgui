@@ -1,6 +1,13 @@
 language: python
 before_install:
-  - pip3 install pycodestyle
+- pip install pyinstaller
+- pip install pycodestyle
 script:
-  - pycodestyle svtgui.py
-  - pytest
+- pycodestyle svtgui.py
+- pytest
+- pyinstaller --onefile --windowed --add-binary $(which svtplay-dl):. svtgui.py
+deploy:
+  edge: true
+  provider: releases
+  file: dist/svtgui
+  draft: true
