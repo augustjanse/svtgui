@@ -7,7 +7,7 @@ jobs:
       script:
       - pycodestyle svtgui.py
       - pytest
-      - pyinstaller --onefile --windowed --add-binary $(which svtplay-dl):. svtgui.py
+      - pyinstaller svtgui.spec
       deploy:
         edge: true
         provider: releases
@@ -29,7 +29,7 @@ jobs:
       script:
       - pycodestyle svtgui.py
       - pytest
-      - pyinstaller --onefile --windowed --add-binary $(which svtplay-dl):. svtgui.py
+      - pyinstaller svtgui.spec
       deploy:
         edge: true
         provider: releases
