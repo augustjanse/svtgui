@@ -1,5 +1,6 @@
 """Starts the SVTGUI graphical application."""
 
+import os
 import subprocess
 import sys
 import tkinter as tk
@@ -77,7 +78,7 @@ def execute(subtitles_requested, all_episodes_requested, url,
     downloaded. When finished, the indicated files should have been
     downloaded to the file system.
     """
-    argument_list = ["svtplay-dl"]
+    argument_list = [resource_path("svtplay-dl")]
 
     if subtitles_requested:
         argument_list.extend([
@@ -126,6 +127,18 @@ def select_all(event):
     event.widget.select_range(0, 'end')
     event.widget.icursor('end')
     return 'break'
+
+
+# https://stackoverflow.com/a/13790741/1729441
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 class StdoutRedirector():
