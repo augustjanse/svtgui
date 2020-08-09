@@ -1,13 +1,37 @@
-language: python
-before_install:
-- pip install pyinstaller
-- pip install pycodestyle
-script:
-- pycodestyle svtgui.py
-- pytest
-- pyinstaller --onefile --windowed --add-binary $(which svtplay-dl):. svtgui.py
-deploy:
-  edge: true
-  provider: releases
-  file: dist/svtgui
-  draft: true
+jobs:
+  include:
+    - language: python
+      before_install:
+      - pip install pyinstaller
+      - pip install pycodestyle
+      script:
+      - pycodestyle svtgui.py
+      - pytest
+      - pyinstaller --onefile --windowed --add-binary $(which svtplay-dl):. svtgui.py
+      deploy:
+        edge: true
+        provider: releases
+        file: dist/svtgui
+        draft: true
+    - os: windows
+      language: shell
+      env: 
+      - PY38PATH=/c/Python38:/c/Python38/Scripts
+      - PATH=$PY38PATH:$PATH
+      before_install:
+      - choco install python 
+      install: 
+      - python -m pip install --upgrade pip
+      - python -m pip install -r requirements.txt
+      - python -m pip install pyinstaller
+      - python -m pip install pycodestyle
+      - python -m pip install pytest
+      script:
+      - pycodestyle svtgui.py
+      - pytest
+      - pyinstaller --onefile --windowed --add-binary $(which svtplay-dl):. svtgui.py
+      deploy:
+        edge: true
+        provider: releases
+        file: dist/svtgui.exe
+        draft: true
