@@ -1,5 +1,12 @@
 # -*- mode: python ; coding: utf-8 -*-
-import shutil
+import platform
+
+svtplay_binaries = []
+if platform.system() == 'Windows':
+    svtplay_binaries = [('svtplay-dl.exe', '.'), ('python35.dll', '.'),
+                        ('lib', '.')]
+else:
+    svtplay_binaries = [('svtplay-dl', '.')]
 
 matches = ["LICENSE.txt","METADATA","PKG-INFO","LICENSE"]
 lics = []
@@ -18,7 +25,7 @@ block_cipher = None
 
 a = Analysis(['svtgui.py'],
              pathex=['/home/august/git/svtgui'],
-             binaries=[(shutil.which('svtplay-dl'), '.')],
+             binaries=svtplay_binaries,
              datas=lics,
              hiddenimports=[],
              hookspath=[],
