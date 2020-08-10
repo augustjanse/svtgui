@@ -1,3 +1,4 @@
+dist: focal
 jobs:
   include:
     - language: python
