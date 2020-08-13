@@ -97,13 +97,12 @@ def execute(subtitles_requested, all_episodes_requested, url,
         argument_list.extend(['--output', output_directory])
 
     print(" ".join(argument_list))
-    for line in run_shell_command(argument_list):
-        print(line)
+    run_shell_command(argument_list)
 
 
 # https://stackoverflow.com/a/4417735/1729441
 def run_shell_command(args):
-    """Calls the given shell command, then yields one line at a time of
+    """Calls the given shell command, then prints one line at a time of
     the combined stdout/stderr output.
     """
 
@@ -112,7 +111,7 @@ def run_shell_command(args):
                              stderr=subprocess.STDOUT,
                              universal_newlines=True)
     for line in iter(popen.stdout.readline, ""):
-        yield line
+        print(line)
     popen.stdout.close()
     ret = popen.wait()
 
