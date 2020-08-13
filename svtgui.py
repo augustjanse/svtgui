@@ -2,10 +2,13 @@
 
 import os
 import platform
+import queue
 import subprocess
 import sys
 import tkinter as tk
 from tkinter import filedialog
+
+import svtplay_dl
 
 
 class SVTGUI():  # pylint: disable=too-few-public-methods
@@ -14,6 +17,9 @@ class SVTGUI():  # pylint: disable=too-few-public-methods
         """Initalize a GUI window with checkboxes, a text box and a clickable
         "Download" button.
         """
+        self.q = queue.Queue()
+        master.after(100, self.check_queue)
+
         self._set_up_window(master)
         self._set_up_input_box()
         self._set_up_checkboxes()
@@ -68,8 +74,21 @@ class SVTGUI():  # pylint: disable=too-few-public-methods
 
     def start_download(self):
         """Calls execute with the contents of checkboxes and input box."""
-        execute(self.subtitles_checked.get(), self.all_episodes_checked.get(),
-                self.textbox.get(), self.output_directory_box.get())
+        self.q.put(lambda: execute(self.subtitles_checked.get(
+        ), self.all_episodes_checked.get(), self.textbox.get(),
+                                   self.output_directory_box.get()))
+
+    # http://stupidpythonideas.blogspot.com/2013/10/
+    # why-your-gui-app-freezes.html
+    def check_queue(self):
+        while True:
+            try:
+                task = self.q.get(block=False)
+            except queue.Empty:
+                break
+            else:
+                root.after_idle(task)
+        root.after(100, self.check_queue)
 
 
 def execute(subtitles_requested, all_episodes_requested, url,
