@@ -1,13 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 import platform
 
-svtplay_binaries = []
-if platform.system() == 'Windows':
-    svtplay_binaries = [('svtplay-dl.exe', '.'), ('python35.dll', '.'),
-                        ('lib', '.')]
-else:
-    svtplay_binaries = [('svtplay-dl', '.')]
-
 matches = ["LICENSE.txt","METADATA","PKG-INFO","LICENSE"]
 lics = []
 print("Find 3rd party dependency license files")
@@ -25,7 +18,7 @@ block_cipher = None
 
 a = Analysis(['svtgui.py'],
              pathex=['/home/august/git/svtgui'],
-             binaries=svtplay_binaries,
+             binaries=[],
              datas=lics,
              hiddenimports=[],
              hookspath=[],
@@ -35,6 +28,12 @@ a = Analysis(['svtgui.py'],
              win_private_assemblies=False,
              cipher=block_cipher,
              noarchive=False)
+
+if platform.system() == 'Windows':
+    a.datas += Tree('svtplay-dl', typecode='BINARY')
+else:
+    a.datas += [('svtplay-dl', 'svtplay-dl', 'DATA')]
+
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,

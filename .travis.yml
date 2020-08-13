@@ -31,8 +31,6 @@ jobs:
       script:
       - wget https://svtplay-dl.se/download/latest/svtplay-dl.zip
       - 7z x svtplay-dl.zip
-      - mv -f svtplay-dl/* .
-      - rmdir svtplay-dl
       - pycodestyle svtgui.py
       - pytest
       - pyinstaller svtgui.spec
