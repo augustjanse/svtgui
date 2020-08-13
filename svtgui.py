@@ -1,6 +1,7 @@
 """Starts the SVTGUI graphical application."""
 
 import os
+import platform
 import subprocess
 import sys
 import tkinter as tk
@@ -78,7 +79,7 @@ def execute(subtitles_requested, all_episodes_requested, url,
     downloaded. When finished, the indicated files should have been
     downloaded to the file system.
     """
-    argument_list = [resource_path("svtplay-dl")]
+    argument_list = [resource_path(append_extension("svtplay-dl"))]
 
     if subtitles_requested:
         argument_list.extend([
@@ -127,6 +128,14 @@ def select_all(event):
     event.widget.select_range(0, 'end')
     event.widget.icursor('end')
     return 'break'
+
+
+def append_extension(binary):
+    """Appends the appropriate extension to the name of an executable,
+    depending on the OS."""
+    system = platform.system()
+
+    return binary + '.exe' if system == 'Windows' else binary
 
 
 # https://stackoverflow.com/a/13790741/1729441
